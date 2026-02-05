@@ -1,3 +1,4 @@
 export default defineEventHandler(async (event) => {
-  return `it's group group index post`
+  const fD = await readMultipartFormData(event)
+  return `it's group index post. FormData: ${fD}`
 })

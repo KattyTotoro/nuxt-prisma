@@ -1,7 +1,11 @@
 <template>
-  <h1>Hello</h1>
-  
+  <h1>Categories dop</h1>
+
+
+
+
 </template>
 
 <script setup lang="ts">
+
 </script>

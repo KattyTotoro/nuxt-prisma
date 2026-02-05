@@ -39,8 +39,13 @@ model post {
 
 model category {
   id    Int    @id @default(autoincrement())
-  name  String
+  name  String @unique
   posts post[]
+}
+
+model category_dop {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
 }
 
 enum role {

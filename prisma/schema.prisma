@@ -11,30 +11,34 @@ datasource db {
 }
 
 model user {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  role  role    @default(USER)
-  name  String?
-  posts post[]
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  role    role     @default(USER)
+  name    String?
+  posts   post[]
   profile profile?
+
+  @@index([name], type: Hash)
 }
 
 model profile {
-  id     Int    @id @default(autoincrement())
+  id     Int   @id @default(autoincrement())
   bio    Json?
-  userId Int    @unique
-  user   user   @relation(fields: [userId], references: [id])
+  userId Int   @unique
+  user   user  @relation(fields: [userId], references: [id])
 }
 
 model post {
-  id         Int     @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   title      String
   content    String?
   data       Json?
-  published  Boolean @default(false)
+  published  Boolean    @default(false)
   authorId   Int
-  author     user    @relation(fields: [authorId], references: [id])
+  author     user       @relation(fields: [authorId], references: [id])
   categories category[]
+
+  @@index([data(ops: JsonbPathOps)], type: Gin)
 }
 
 model category {
@@ -44,8 +48,8 @@ model category {
 }
 
 model category_dop {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
 }
 
 enum role {

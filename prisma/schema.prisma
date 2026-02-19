@@ -16,6 +16,7 @@ model user {
   role    role     @default(USER)
   name    String?
   posts   post[]
+  groups  group[]
   profile profile?
 
   @@index([name], type: Hash)
@@ -52,7 +53,15 @@ model category_dop {
   name String @unique
 }
 
+model group {
+  id Int @id @default(autoincrement())
+  name String @unique
+  users user[]
+}
+
 enum role {
   USER
   ADMIN
 }
+
+

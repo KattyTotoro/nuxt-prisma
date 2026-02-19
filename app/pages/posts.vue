@@ -48,10 +48,20 @@
     <button>delete</button>
     <p v-if="deleteText">{{ deleteText }}</p>
   </form>
+   <h1>Add post to category</h1>
+  <form @submit.prevent="addPostToCategory">
+    <input type="text" placeholder="post id" v-model="addId" />
+    <input type="text" placeholder="category id" v-model="addCategoryId" />
+    <button>add user</button>
+    <p v-if="addCategoryText">{{ addCategoryText }}</p>
+  </form>
 </template>
 
 <script setup lang="ts">
 const { data, refresh } = await useFetch<any[]>('/api/posts')
+const addId = ref('')
+const addCategoryId = ref('')
+const addCategoryText = ref('')
 const addPostObj = ref({ title: '', content: '', data: { images: [{img:'', alt:''}] as any[] } , published: false, authorId: '' })
 const editPostId = ref('')
 const editPostObj = ref(null as null|any)
@@ -127,6 +137,21 @@ const deletePost = async () => {
     refresh()
   } else {
     deleteText.value = 'post not exist'
+  }
+}
+
+const addPostToCategory = async () => {
+  addCategoryText.value = ''
+  if (!addId.value || !addCategoryId.value) {
+    addCategoryText.value = 'Укажите все данные'
+    return
+  }
+  const result = await $fetch('/api/posts/add_category', {method:'post', body:{id:addId.value, category_id:addCategoryId.value}})
+  if (result) {
+    addCategoryText.value = `post ${addId.value} added to category ${addCategoryId.value}`
+    refresh()
+  } else {
+    addCategoryText.value = 'Post or category not exist'
   }
 }
 

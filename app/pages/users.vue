@@ -23,12 +23,22 @@
     <button>delete</button>
     <p v-if="deleteText">{{ deleteText }}</p>
   </form>
+  <h1>Add user to Group</h1>
+  <form @submit.prevent="addUserToGroup">
+    <input type="text" placeholder="group id" v-model="addId" />
+    <input type="text" placeholder="user id" v-model="addUserId" />
+    <button>add user</button>
+    <p v-if="addUserText">{{ addUserText }}</p>
+  </form>
 </template>
 
 <script setup lang="ts">
 const { data, refresh } = await useFetch('/api/users')
 const addUserObj = ref({name:'', email:''})
 const editUserObj = ref({ name: '', email: '' })
+const addId = ref('')
+const addUserId = ref('')
+const addUserText = ref('')
 const addText = ref('')
 const editText = ref('')
 const deleteText = ref('')
@@ -84,5 +94,18 @@ const deleteUser = async () => {
     deleteText.value = 'user not exist'
   }
 }
-
+const addUserToGroup = async () => {
+  addUserText.value = ''
+  if (!addId.value || !addUserId.value) {
+    addUserText.value = 'Укажите все данные'
+    return
+  }
+  const result = await $fetch('/api/users/add_to_group', {method:'post', body:{id:addId.value, user_id:addUserId.value}})
+  if (result) {
+    addUserText.value = `user ${addUserId.value} added to group ${addId.value}`
+    refresh()
+  } else {
+    addUserText.value = 'Group or user not exist'
+  }
+}
 </script>

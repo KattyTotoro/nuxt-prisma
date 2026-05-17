@@ -1,9 +1,8 @@
 export default defineEventHandler(async (event) => {
   try {
-    const apartments = await prisma.apartments.findMany({
-      
+    const costbyperiod = await prisma.costbyperiod.findMany({
     })
-    return apartments
+    return costbyperiod
   } catch(e) {
     console.log(e)
     return []
